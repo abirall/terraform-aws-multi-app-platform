@@ -1,0 +1,176 @@
+Acquiring state lock. This may take a few moments...
+[0m[1mdata.aws_ami.ubuntu_arm64: Reading...[0m[0m
+[0m[1mmodule.vpc.data.aws_availability_zones.available: Reading...[0m[0m
+[0m[1mmodule.vpc.data.aws_region.current: Reading...[0m[0m
+[0m[1mmodule.ecs.aws_iam_role.ecs_instance_role: Refreshing state... [id=logicmatrix-prod-ecs-instance-role][0m
+[0m[1mmodule.ecs.aws_ecs_cluster.this: Refreshing state... [id=arn:aws:ecs:us-east-1:759626151611:cluster/logicmatrix-prod-ecs-cluster][0m
+[0m[1mmodule.ecr.aws_ecr_repository.app: Refreshing state... [id=logicmatrix-repo][0m
+[0m[1mmodule.acm.aws_acm_certificate.wildcard: Refreshing state... [id=arn:aws:acm:us-east-1:759626151611:certificate/87971e26-215b-4ec9-ad40-785e5f3126d2][0m
+[0m[1mmodule.vpc.aws_eip.nat: Refreshing state... [id=eipalloc-0b74b87e6a6f41e39][0m
+[0m[1mmodule.vpc.aws_vpc.main: Refreshing state... [id=vpc-09fb85f20172d7f3a][0m
+[0m[1maws_iam_role.netbird_routing_peer: Refreshing state... [id=logicmatrix-prod-netbird-routing-peer][0m
+[0m[1mmodule.vpc.data.aws_region.current: Read complete after 0s [id=us-east-1][0m
+[0m[1mmodule.lgm_web.aws_iam_role.task_execution: Refreshing state... [id=logicmatrix-prod-web-execution-role][0m
+[0m[1mmodule.ecs.data.aws_ami.ecs_optimized: Reading...[0m[0m
+[0m[1mmodule.vpc.data.aws_availability_zones.available: Read complete after 2s [id=us-east-1][0m
+[0m[1mmodule.lgm_web.aws_cloudwatch_log_group.web: Refreshing state... [id=/ecs/logicmatrix-prod-web][0m
+[0m[1mmodule.acm.aws_acm_certificate_validation.wildcard: Refreshing state... [id=0001-01-01 00:00:00 +0000 UTC][0m
+[0m[1mdata.aws_ami.ubuntu_arm64: Read complete after 2s [id=ami-0bcb8b16862f4d7ab][0m
+[0m[1mmodule.ecr.aws_ecr_lifecycle_policy.app: Refreshing state... [id=logicmatrix-repo][0m
+[0m[1maws_iam_role_policy_attachment.netbird_routing_peer_ssm_core: Refreshing state... [id=logicmatrix-prod-netbird-routing-peer-20260805183115311600000001][0m
+[0m[1maws_iam_instance_profile.netbird_routing_peer: Refreshing state... [id=logicmatrix-prod-netbird-routing-peer][0m
+[0m[1mmodule.lgm_web.aws_iam_role_policy_attachment.task_execution: Refreshing state... [id=logicmatrix-prod-web-execution-role-20260805055143485100000003][0m
+[0m[1mmodule.ecs.aws_iam_role_policy_attachment.ecs_instance_role_policy: Refreshing state... [id=logicmatrix-prod-ecs-instance-role-20260805055143470900000002][0m
+[0m[1mmodule.ecs.aws_iam_instance_profile.ecs_instance_profile: Refreshing state... [id=logicmatrix-prod-ecs-instance-profile][0m
+[0m[1mmodule.ecs.data.aws_ami.ecs_optimized: Read complete after 1s [id=ami-02564a0a159a33ef6][0m
+[0m[1mmodule.lgm_web.aws_ecs_task_definition.web: Refreshing state... [id=logicmatrix-prod-web-task][0m
+[0m[1mmodule.ecs.aws_launch_template.ecs: Refreshing state... [id=lt-0264bd814f79d1ea0][0m
+[0m[1mmodule.vpc.aws_internet_gateway.gw: Refreshing state... [id=igw-0c7fcbb14afe2cafe][0m
+[0m[1mmodule.vpc.aws_subnet.database_1: Refreshing state... [id=subnet-05c009b2286502b59][0m
+[0m[1mmodule.vpc.aws_subnet.public_2: Refreshing state... [id=subnet-0f7655400f0cdf0eb][0m
+[0m[1mmodule.vpc.aws_subnet.public_1: Refreshing state... [id=subnet-0537b1eb5ece18666][0m
+[0m[1mmodule.vpc.aws_subnet.private: Refreshing state... [id=subnet-0683038465a0e76e1][0m
+[0m[1maws_route53_zone.private: Refreshing state... [id=Z09818241PD5OOIV9V9QF][0m
+[0m[1mmodule.alb.aws_security_group.alb: Refreshing state... [id=sg-0617d52f3cf4e94c5][0m
+[0m[1mmodule.vpc.aws_subnet.database_2: Refreshing state... [id=subnet-092b7312244a167b1][0m
+[0m[1maws_security_group.postgres: Refreshing state... [id=sg-0a4f0084a64915f66][0m
+[0m[1maws_security_group.netbird_routing_peer: Refreshing state... [id=sg-032c7c6000278dd8f][0m
+[0m[1mmodule.vpc.aws_route_table.database: Refreshing state... [id=rtb-0b4b89aad1129a51c][0m
+[0m[1mmodule.alb.aws_lb_target_group.this["lgm-web"]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:759626151611:targetgroup/logicmatrix-lgm-web-tg/3c3097ea9e525448][0m
+[0m[1mmodule.vpc.aws_route_table.public: Refreshing state... [id=rtb-0eac2b9dc4a28d49f][0m
+[0m[1mmodule.vpc.aws_nat_gateway.this: Refreshing state... [id=nat-0cbeb0f12f916b815][0m
+[0m[1mmodule.ecs.aws_autoscaling_group.ecs: Refreshing state... [id=logicmatrix-prod-ecs-asg][0m
+[0m[1mmodule.alb.aws_lb.main: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:759626151611:loadbalancer/app/logicmatrix-alb/7325dfa1b49e4f28][0m
+[0m[1mmodule.ecs.aws_security_group.ecs_instances: Refreshing state... [id=sg-03d1cda9004adbf84][0m
+[0m[1mmodule.lgm_web.aws_security_group.task: Refreshing state... [id=sg-04518e4a030c3128e][0m
+[0m[1maws_db_subnet_group.postgres: Refreshing state... [id=logicmatrix-prod-postgres][0m
+[0m[1mmodule.vpc.aws_route_table.private: Refreshing state... [id=rtb-0c6f7f1aafc550bba][0m
+[0m[1mmodule.vpc.aws_route_table_association.database_2: Refreshing state... [id=rtbassoc-0a03ad96744c558c0][0m
+[0m[1mmodule.vpc.aws_route_table_association.database_1: Refreshing state... [id=rtbassoc-026af286669843dac][0m
+[0m[1mmodule.vpc.aws_route_table_association.pub_1: Refreshing state... [id=rtbassoc-0c0d4a9a3f3d663c6][0m
+[0m[1mmodule.vpc.aws_route_table_association.pub_2: Refreshing state... [id=rtbassoc-0344d02c4b28d23f1][0m
+[0m[1maws_launch_template.netbird_routing_peer: Refreshing state... [id=lt-0af27ed513214dbfc][0m
+[0m[1maws_vpc_security_group_egress_rule.netbird_routing_peer_all: Refreshing state... [id=sgr-0f0fe091cfb9d0efe][0m
+[0m[1mmodule.vpc.aws_route_table_association.priv: Refreshing state... [id=rtbassoc-0b95b7bf2ad744398][0m
+[0m[1mmodule.vpc.aws_vpc_endpoint.s3: Refreshing state... [id=vpce-0fd0f4d1cc9d8f309][0m
+[0m[1maws_vpc_security_group_ingress_rule.postgres_from_lgm_web: Refreshing state... [id=sgr-06eb99ded788160b0][0m
+[0m[1maws_instance.netbird_routing_peer: Refreshing state... [id=i-09965e0230cde45cd][0m
+[0m[1mmodule.ecs.aws_ecs_capacity_provider.this: Refreshing state... [id=arn:aws:ecs:us-east-1:759626151611:capacity-provider/logicmatrix-prod-ecs-cluster-capacity-provider][0m
+[0m[1mmodule.lgm_web.aws_ecs_service.web: Refreshing state... [id=arn:aws:ecs:us-east-1:759626151611:service/logicmatrix-prod-ecs-cluster/logicmatrix-prod-web][0m
+[0m[1mmodule.ecs.aws_ecs_cluster_capacity_providers.this: Refreshing state... [id=logicmatrix-prod-ecs-cluster][0m
+[0m[1maws_db_instance.postgres: Refreshing state... [id=db-E2PZHJAI43JVXFJ6B2E42PRIXM][0m
+[0m[1mmodule.alb.aws_lb_listener.https: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:759626151611:listener/app/logicmatrix-alb/7325dfa1b49e4f28/a632ce3a812d7330][0m
+[0m[1maws_route53_record.postgres: Refreshing state... [id=Z09818241PD5OOIV9V9QF_postgres.aws.logicmatrix.tech_CNAME][0m
+[0m[1mmodule.alb.aws_lb_listener_rule.this["logicmatrix.us"]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:759626151611:listener-rule/app/logicmatrix-alb/7325dfa1b49e4f28/a632ce3a812d7330/a25da806c3b395e6][0m
+[0m[1maws_vpc_security_group_ingress_rule.postgres_from_netbird_routing_peer: Refreshing state... [id=sgr-011b437a175df9194][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [33m~[0m update in-place[0m
+[31m-[0m/[32m+[0m destroy and then create replacement[0m
+
+Terraform will perform the following actions:
+
+[1m  # aws_db_instance.postgres[0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "aws_db_instance" "postgres" {
+      [33m~[0m[0m address                               = "logicmatrix-prod-postgres.cw9s0su6chfd.us-east-1.rds.amazonaws.com" -> (known after apply)
+      [33m~[0m[0m arn                                   = "arn:aws:rds:us-east-1:759626151611:db:logicmatrix-prod-postgres" -> (known after apply)
+      [33m~[0m[0m availability_zone                     = "us-east-1b" -> (known after apply)
+      [33m~[0m[0m backup_target                         = "region" -> (known after apply)
+      [33m~[0m[0m backup_window                         = "06:25-06:55" -> (known after apply)
+      [33m~[0m[0m ca_cert_identifier                    = "rds-ca-rsa2048-g1" -> (known after apply)
+      [32m+[0m[0m character_set_name                    = (known after apply)
+      [31m-[0m[0m customer_owned_ip_enabled             = false [90m-> null[0m[0m
+      [33m~[0m[0m database_insights_mode                = "standard" -> (known after apply)
+      [33m~[0m[0m db_name                               = "logicmatrix" [33m->[0m[0m "logicmatrixweb_db" [31m# forces replacement[0m[0m
+      [31m-[0m[0m domain_dns_ips                        = [] [90m-> null[0m[0m
+      [32m+[0m[0m domain_fqdn                           = (known after apply)
+      [33m~[0m[0m endpoint                              = "logicmatrix-prod-postgres.cw9s0su6chfd.us-east-1.rds.amazonaws.com:5432" -> (known after apply)
+      [33m~[0m[0m engine_lifecycle_support              = "open-source-rds-extended-support" -> (known after apply)
+      [33m~[0m[0m engine_version_actual                 = "16.13" -> (known after apply)
+      [33m~[0m[0m hosted_zone_id                        = "Z2R2ITUGPM61AM" -> (known after apply)
+      [31m-[0m[0m iam_database_authentication_enabled   = false [90m-> null[0m[0m
+      [33m~[0m[0m id                                    = "db-E2PZHJAI43JVXFJ6B2E42PRIXM" -> (known after apply)
+      [32m+[0m[0m identifier_prefix                     = (known after apply)
+      [33m~[0m[0m iops                                  = 3000 -> (known after apply)
+      [33m~[0m[0m kms_key_id                            = "arn:aws:kms:us-east-1:759626151611:key/3e2cac6f-2b0f-43f8-8b5b-2e3d78f9f3cb" -> (known after apply)
+      [33m~[0m[0m latest_restorable_time                = "2026-08-12T12:38:22Z" -> (known after apply)
+      [33m~[0m[0m license_model                         = "postgresql-license" -> (known after apply)
+      [33m~[0m[0m listener_endpoint                     = [] -> (known after apply)
+      [33m~[0m[0m maintenance_window                    = "sun:08:10-sun:08:40" -> (known after apply)
+      [33m~[0m[0m master_user_secret                    = [] -> (known after apply)
+      [32m+[0m[0m master_user_secret_kms_key_id         = (known after apply)
+      [32m+[0m[0m monitoring_role_arn                   = (known after apply)
+      [32m+[0m[0m nchar_character_set_name              = (known after apply)
+      [33m~[0m[0m network_type                          = "IPV4" -> (known after apply)
+      [33m~[0m[0m option_group_name                     = "default:postgres-16" -> (known after apply)
+      [33m~[0m[0m parameter_group_name                  = "default.postgres16" -> (known after apply)
+      [33m~[0m[0m password                              = (sensitive value)
+      [32m+[0m[0m performance_insights_kms_key_id       = (known after apply)
+      [33m~[0m[0m performance_insights_retention_period = 0 -> (known after apply)
+      [32m+[0m[0m replica_mode                          = (known after apply)
+      [33m~[0m[0m replicas                              = [] -> (known after apply)
+      [33m~[0m[0m resource_id                           = "db-E2PZHJAI43JVXFJ6B2E42PRIXM" -> (known after apply)
+      [32m+[0m[0m snapshot_identifier                   = (known after apply)
+      [33m~[0m[0m status                                = "available" -> (known after apply)
+      [33m~[0m[0m storage_throughput                    = 125 -> (known after apply)
+        tags                                  = {
+            "Environment" = "prod"
+            "Name"        = "logicmatrix-prod-postgres"
+            "Project"     = "logicmatrix"
+        }
+      [32m+[0m[0m timezone                              = (known after apply)
+      [33m~[0m[0m username                              = "postgres" [33m->[0m[0m "logicmatrixweb_admin" [31m# forces replacement[0m[0m
+        [90m# (33 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # aws_instance.netbird_routing_peer[0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_instance" "netbird_routing_peer" {
+        id                                   = "i-09965e0230cde45cd"
+        tags                                 = {
+            "Environment" = "prod"
+            "Name"        = "logicmatrix-prod-netbird-routing-peer"
+            "Project"     = "logicmatrix"
+        }
+      [33m~[0m[0m user_data                            = "c1ad6722192ed3c244ba83c7b4044acc3b502657" [33m->[0m[0m "c121dc072b7290bf6c804b47224e17d7df36d4a5"
+        [90m# (39 unchanged attributes hidden)[0m[0m
+
+        [90m# (10 unchanged blocks hidden)[0m[0m
+    }
+
+[1m  # aws_route53_record.postgres[0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_route53_record" "postgres" {
+        id                               = "Z09818241PD5OOIV9V9QF_postgres.aws.logicmatrix.tech_CNAME"
+        name                             = "postgres.aws.logicmatrix.tech"
+      [33m~[0m[0m records                          = [
+          [31m-[0m[0m "logicmatrix-prod-postgres.cw9s0su6chfd.us-east-1.rds.amazonaws.com",
+        ] -> (known after apply)
+        [90m# (7 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.ecs.aws_launch_template.ecs[0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_launch_template" "ecs" {
+        id                                   = "lt-0264bd814f79d1ea0"
+      [33m~[0m[0m image_id                             = "ami-00138ca4de1a8caf6" [33m->[0m[0m "ami-02564a0a159a33ef6"
+      [33m~[0m[0m latest_version                       = 1 -> (known after apply)
+        name                                 = "logicmatrix-prod-ecs-20260805055153423700000004"
+        tags                                 = {
+            "Name" = "logicmatrix-prod-ecs-launch-template"
+        }
+        [90m# (16 unchanged attributes hidden)[0m[0m
+
+        [90m# (2 unchanged blocks hidden)[0m[0m
+    }
+
+[1mPlan:[0m [0m1 to add, 3 to change, 1 to destroy.
+
+Changes to Outputs:
+  [33m~[0m[0m database_arn                           = "arn:aws:rds:us-east-1:759626151611:db:logicmatrix-prod-postgres" -> (known after apply)
+  [33m~[0m[0m database_name                          = "logicmatrix" [33m->[0m[0m "logicmatrixweb_db"
+  [33m~[0m[0m database_rds_address                   = "logicmatrix-prod-postgres.cw9s0su6chfd.us-east-1.rds.amazonaws.com" -> (known after apply)
+[90m
+─────────────────────────────────────────────────────────────────────────────[0m
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
+Releasing state lock. This may take a few moments...

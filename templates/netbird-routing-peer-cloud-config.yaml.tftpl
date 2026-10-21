@@ -1,0 +1,108 @@
+#cloud-config
+# NetBird setup-key rotation version: ${netbird_setup_key_version}
+hostname: ${netbird_peer_hostname}
+manage_etc_hosts: true
+
+swap:
+  filename: /swapfile
+  size: 1G
+  maxsize: 1G
+
+package_update: true
+packages:
+  - awscli
+  - ca-certificates
+  - curl
+  - dnsmasq-base
+
+write_files:
+  - path: /etc/sysctl.d/99-netbird-routing-peer.conf
+    owner: root:root
+    permissions: "0644"
+    content: |
+      net.ipv4.ip_forward = 1
+      net.ipv6.conf.all.forwarding = 1
+
+  - path: /etc/netbird-dnsmasq.conf
+    owner: root:root
+    permissions: "0644"
+    content: |
+      port=5353
+      interface=wt0
+      bind-dynamic
+      no-resolv
+      server=169.254.169.253
+      cache-size=1000
+      domain=${private_dns_zone_name}
+
+  - path: /etc/systemd/system/netbird-dns-forwarder.service
+    owner: root:root
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=NetBird VPC DNS forwarder
+      After=network-online.target netbird.service
+      Wants=network-online.target
+      Requires=netbird.service
+
+      [Service]
+      ExecStart=/usr/sbin/dnsmasq --keep-in-foreground --conf-file=/etc/netbird-dnsmasq.conf
+      Restart=on-failure
+      RestartSec=5s
+
+      [Install]
+      WantedBy=multi-user.target
+
+  - path: /usr/local/sbin/configure-netbird-routing-peer
+    owner: root:root
+    permissions: "0700"
+    content: |
+      #!/bin/bash
+      set -euo pipefail
+
+      IMDS_TOKEN=$(curl -fsS -X PUT \
+        -H 'X-aws-ec2-metadata-token-ttl-seconds: 300' \
+        http://169.254.169.254/latest/api/token)
+      INSTANCE_ID=$(curl -fsS \
+        -H "X-aws-ec2-metadata-token: $IMDS_TOKEN" \
+        http://169.254.169.254/latest/meta-data/instance-id)
+
+      SOURCE_DEST_CHECK_DISABLED=false
+      for attempt in $(seq 1 12); do
+        if aws ec2 modify-instance-attribute \
+          --instance-id "$INSTANCE_ID" \
+          --source-dest-check Value=false \
+          --region '${aws_region}'; then
+          SOURCE_DEST_CHECK_DISABLED=true
+          break
+        fi
+        sleep 5
+      done
+      test "$SOURCE_DEST_CHECK_DISABLED" = true
+
+      NETBIRD_SETUP_KEY=$(aws ssm get-parameter \
+        --name '${netbird_setup_key_parameter_name}' \
+        --with-decryption \
+        --query Parameter.Value \
+        --output text \
+        --region '${aws_region}')
+
+      curl -fsSL https://pkgs.netbird.io/install.sh | sh
+      netbird up \
+        --setup-key "$NETBIRD_SETUP_KEY" \
+        --allow-server-ssh \
+        --enable-ssh-root
+      unset NETBIRD_SETUP_KEY
+
+      sysctl --system
+      systemctl daemon-reload
+      systemctl enable --now netbird-dns-forwarder.service
+
+      systemctl is-active --quiet netbird.service
+      systemctl is-active --quiet netbird-dns-forwarder.service
+      netbird status | grep -q 'Management: Connected'
+
+runcmd:
+  - [/usr/local/sbin/configure-netbird-routing-peer]
+
+final_message: "NetBird routing-peer bootstrap completed after $UPTIME seconds"

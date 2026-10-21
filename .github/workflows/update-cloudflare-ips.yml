@@ -1,0 +1,142 @@
+name: Sync Cloudflare IPs to AWS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-cloudflare-ips
+  cancel-in-progress: true
+
+jobs:
+  sync-cloudflare-ips:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_ALB_SECURITY_GROUP_ID: ${{ secrets.AWS_ALB_SECURITY_GROUP_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        run: |
+          aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
+          aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
+          aws configure set default.region "$AWS_REGION"
+
+      - name: Verify Cloudflare API access
+        run: |
+          curl -fsS -X GET "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H "Content-Type: application/json" > cloudflare-zone.json
+
+      - name: Fetch current Cloudflare IPv4 ranges
+        run: |
+          curl -fsSL https://www.cloudflare.com/ips-v4/ -o cloudflare-ips.txt
+
+      - name: Sync the allow-list to AWS and Terraform
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import re
+          import subprocess
+          from pathlib import Path
+
+          sg_id = os.environ['AWS_ALB_SECURITY_GROUP_ID']
+          region = os.environ['AWS_REGION']
+          path = Path('terraform.tfvars')
+          content = path.read_text()
+          ips = [line.strip() for line in Path('cloudflare-ips.txt').read_text().splitlines() if line.strip()]
+          if not ips:
+              raise SystemExit('No Cloudflare IPs found')
+
+          rendered = "cloudflare_allowed_cidrs = [\n"
+          for ip in ips:
+              rendered += f'  "{ip}",\n'
+          rendered += "]\n"
+
+          pattern = re.compile(r'cloudflare_allowed_cidrs\s*=\s*\[.*?\]\n', re.S)
+          if pattern.search(content):
+              content = pattern.sub(rendered, content, count=1)
+          else:
+              content += "\n" + rendered
+
+          path.write_text(content)
+
+          describe = subprocess.run([
+              'aws', 'ec2', 'describe-security-groups',
+              '--group-ids', sg_id,
+              '--region', region,
+              '--output', 'json'
+          ], check=True, capture_output=True, text=True)
+          sg = json.loads(describe.stdout)
+          permissions = sg['SecurityGroups'][0].get('IpPermissions', [])
+
+          for permission in permissions:
+              if permission.get('IpProtocol') != 'tcp':
+                  continue
+              if permission.get('FromPort') != 443 or permission.get('ToPort') != 443:
+                  continue
+              for ip_range in permission.get('IpRanges', []):
+                  cidr = ip_range.get('CidrIp')
+                  if cidr:
+                      subprocess.run([
+                          'aws', 'ec2', 'revoke-security-group-ingress',
+                          '--group-id', sg_id,
+                          '--region', region,
+                          '--ip-permissions', json.dumps([
+                              {
+                                  'IpProtocol': 'tcp',
+                                  'FromPort': 443,
+                                  'ToPort': 443,
+                                  'IpRanges': [{'CidrIp': cidr}]
+                              }
+                          ])
+                      ], check=True, capture_output=True, text=True)
+
+          for cidr in ips:
+              subprocess.run([
+                  'aws', 'ec2', 'authorize-security-group-ingress',
+                  '--group-id', sg_id,
+                  '--region', region,
+                  '--ip-permissions', json.dumps([
+                      {
+                          'IpProtocol': 'tcp',
+                          'FromPort': 443,
+                          'ToPort': 443,
+                          'IpRanges': [{'CidrIp': cidr}]
+                      }
+                  ])
+              ], check=True, capture_output=True, text=True)
+          PY
+
+      - name: Check for changes
+        id: diff
+        run: |
+          git status --short
+          if git diff --quiet -- terraform.tfvars; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create pull request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: 'chore: update Cloudflare IP allow-list'
+          title: 'chore: update Cloudflare IP allow-list'
+          body: |
+            Automated update of the Cloudflare IP allow-list used by the ALB security group.
+          branch: 'chore/update-cloudflare-ips'
+          delete-branch: true
